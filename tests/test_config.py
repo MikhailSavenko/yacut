@@ -17,4 +17,5 @@ def test_config(default_app):
     )
     assert default_app.config['SECRET_KEY'] == os.getenv('SECRET_KEY'), (
         'Проверьте, что конфигурационному ключу SECRET_KEY '
-        'присвоено значение')
+        'присвоено значение'
+    )

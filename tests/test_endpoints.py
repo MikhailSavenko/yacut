@@ -6,13 +6,16 @@ py_url = 'https://www.python.org'
 
 
 def test_create_id(client):
-    got = client.post('/api/id/', json={
-        'url': py_url,
-        'custom_id': 'py',
-    })
-    assert got.status_code == 201, (
-        'При создании короткой ссылки должен возвращаться статус-код 201'
+    got = client.post(
+        '/api/id/',
+        json={
+            'url': py_url,
+            'custom_id': 'py',
+        },
     )
+    assert (
+        got.status_code == 201
+    ), 'При создании короткой ссылки должен возвращаться статус-код 201'
     assert list(got.json.keys()) == ['short_link', 'url'], (
         'При создании короткой ссылки в ответе должны быть ключи `url, '
         'short_link`'
@@ -44,14 +47,17 @@ def test_create_empty_body(client):
     )
 
 
-@pytest.mark.parametrize('json_data', [
-    ({'url': py_url, 'custom_id': '.,/!?'}),
-    ({'url': py_url, 'custom_id': 'Hodor-Hodor'}),
-    ({'url': py_url, 'custom_id': 'h@k$r'}),
-    ({'url': py_url, 'custom_id': '$'}),
-    ({'url': py_url, 'custom_id': 'п'}),
-    ({'url': py_url, 'custom_id': 'l l'}),
-])
+@pytest.mark.parametrize(
+    'json_data',
+    [
+        ({'url': py_url, 'custom_id': '.,/!?'}),
+        ({'url': py_url, 'custom_id': 'Hodor-Hodor'}),
+        ({'url': py_url, 'custom_id': 'h@k$r'}),
+        ({'url': py_url, 'custom_id': '$'}),
+        ({'url': py_url, 'custom_id': 'п'}),
+        ({'url': py_url, 'custom_id': 'l l'}),
+    ],
+)
 def test_invalid_short_url(json_data, client):
     got = client.post('/api/id/', json=json_data)
     assert got.status_code == 400, (
@@ -62,9 +68,9 @@ def test_invalid_short_url(json_data, client):
         'При недопустимом имени для короткой ссылки в ответе должен быть '
         'ключ `message`'
     )
-    assert (
-        got.json == {'message': 'Указано недопустимое имя для короткой ссылки'}
-    ), (
+    assert got.json == {
+        'message': 'Указано недопустимое имя для короткой ссылки'
+    }, (
         'При недопустимом имени короткой ссылки возвращается сообщение, '
         'не соответствующее спецификации.'
     )
@@ -77,9 +83,12 @@ def test_invalid_short_url(json_data, client):
 
 def test_no_required_field(client):
     try:
-        got = client.post('/api/id/', json={
-            'short_link': 'python',
-        })
+        got = client.post(
+            '/api/id/',
+            json={
+                'short_link': 'python',
+            },
+        )
     except Exception:
         raise AssertionError(
             'Если тело запроса к эндпоинту `/api/id/` отличается от '
@@ -101,10 +110,13 @@ def test_no_required_field(client):
 
 def test_url_already_exists(client, short_python_url):
     try:
-        got = client.post('/api/id/', json={
-            'url': py_url,
-            'custom_id': 'py',
-        })
+        got = client.post(
+            '/api/id/',
+            json={
+                'url': py_url,
+                'custom_id': 'py',
+            },
+        )
     except Exception:
         raise AssertionError(
             'При попытке создания ссылки с коротким именем, которое уже '
@@ -118,20 +130,21 @@ def test_url_already_exists(client, short_python_url):
         'При попытке создания ссылки с коротким именем, которое уже занято - '
         'верните ответ с ключом `message`.'
     )
-    assert (
-        got.json == {
-            'message': 'Предложенный вариант короткой ссылки уже существует.'
-        }
-    ), (
+    assert got.json == {
+        'message': 'Предложенный вариант короткой ссылки уже существует.'
+    }, (
         'При попытке создания ссылки с коротким именем, которое уже занято '
         'возвращается сообщение с текстом, не соответствующим спецификации.'
     )
 
 
-@pytest.mark.parametrize('json_data', [
-    ({'url': py_url, 'custom_id': None}),
-    ({'url': py_url, 'custom_id': ''}),
-])
+@pytest.mark.parametrize(
+    'json_data',
+    [
+        ({'url': py_url, 'custom_id': None}),
+        ({'url': py_url, 'custom_id': ''}),
+    ],
+)
 def test_generated_unique_short_id(json_data, client):
     try:
         got = client.post('/api/id/', json=json_data)
@@ -196,10 +209,13 @@ def test_len_short_id_api(client):
     long_string = (
         'CuriosityisnotasinHarryHoweverfromtimetotimeyoushouldexercisecaution'
     )
-    got = client.post('/api/id/', json={
-        'url': py_url,
-        'custom_id': long_string,
-    })
+    got = client.post(
+        '/api/id/',
+        json={
+            'url': py_url,
+            'custom_id': long_string,
+        },
+    )
     assert got.status_code == 400, (
         'Если при POST-запросе к эндпоинту `/api/id/` '
         'поле `short_id` содержит строку длиннее 16 символов - нужно вернуть '
@@ -210,9 +226,9 @@ def test_len_short_id_api(client):
         'поле `short_id` содержит строку длиннее 16 символов - в ответе '
         'должен быть ключ `message`.'
     )
-    assert (
-        got.json == {'message': 'Указано недопустимое имя для короткой ссылки'}
-    ), (
+    assert got.json == {
+        'message': 'Указано недопустимое имя для короткой ссылки'
+    }, (
         'При POST-запросе к эндпоинту `/api/id/`, в поле `short_id` которого '
         'передана строка длиннее 16 символов, возвращается ответ, не '
         'соответствующий спецификации.'
@@ -220,9 +236,12 @@ def test_len_short_id_api(client):
 
 
 def test_len_short_id_autogenerated_api(client):
-    client.post('/api/id/', json={
-        'url': py_url,
-    })
+    client.post(
+        '/api/id/',
+        json={
+            'url': py_url,
+        },
+    )
     unique_id = URLMap.query.filter_by(original=py_url).first()
     assert len(unique_id.short) == 6, (
         'При POST-запросе, в теле которого не указана короткая ссылка, '

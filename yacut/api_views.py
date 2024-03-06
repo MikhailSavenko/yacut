@@ -17,8 +17,10 @@ def create_new_object_api(data):
         return short_url
     except SQLAlchemyError as e:
         db.session.rollback()
-        raise InvalidAPIUsage(f"Ошибка при создании нового объекта URLMap: {e}")
-    
+        raise InvalidAPIUsage(
+            f"Ошибка при создании нового объекта URLMap: {e}"
+        )
+
 
 @app.route('/api/id/', methods=['POST'])
 def create_id():
@@ -29,7 +31,11 @@ def create_id():
         raise InvalidAPIUsage('\"url\" является обязательным полем!')
     if data.get('url') is None or data.get('url') == '':
         raise InvalidAPIUsage('Отсутствует тело запроса')
-    if 'custom_id' in data:
+    if (
+        'custom_id' in data
+        and data.get('custom_id') is not None
+        and data.get('custom_id') != ''
+    ):
         short = data.get('custom_id')
         validator_custom_id(data.get('custom_id'))
         duplicate_validator(short)

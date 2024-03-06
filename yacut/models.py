@@ -1,7 +1,6 @@
 from datetime import datetime
 
 from yacut import db
-import os
 
 
 class URLMap(db.Model):
@@ -12,8 +11,7 @@ class URLMap(db.Model):
 
     def to_dict(self):
         return dict(
-            url=self.original,
-            short_link='http://localhost/' + self.short
+            url=self.original, short_link='http://localhost/' + self.short
         )
 
     def from_dict(self, data):
@@ -21,5 +19,3 @@ class URLMap(db.Model):
             self.original = data['url']
         if 'custom_id' in data:
             self.short = data['custom_id']
-        
-            

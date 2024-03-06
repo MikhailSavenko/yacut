@@ -37,11 +37,13 @@ def default_app():
 def _app(tmp_path):
     db_path = tmp_path / 'test_db.sqlite3'
     db_uri = 'sqlite:///' + str(db_path)
-    app.config.update({
-        'TESTING': True,
-        'SQLALCHEMY_DATABASE_URI': db_uri,
-        'WTF_CSRF_ENABLED': False,
-    })
+    app.config.update(
+        {
+            'TESTING': True,
+            'SQLALCHEMY_DATABASE_URI': db_uri,
+            'WTF_CSRF_ENABLED': False,
+        }
+    )
     with app.app_context():
         db.create_all()
     yield app

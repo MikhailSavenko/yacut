@@ -9,10 +9,7 @@ from sqlalchemy.exc import SQLAlchemyError
 
 def create_new_object(original, short) -> object:
     try:
-        short_url = URLMap(
-            original=original,
-            short=short
-        )
+        short_url = URLMap(original=original, short=short)
         db.session.add(short_url)
         db.session.commit()
         return short_url
@@ -32,8 +29,12 @@ def get_short(form, original, short):
         flash('Предложенный вариант короткой ссылки уже существует.')
         return render_template('index.html', form=form)
     short_url = create_new_object(original=original, short=short)
-    short = 'http://127.0.0.1:5000/' + short_url.short
-    flash(Markup(f'Ваша новая ссылка готова: <br> <a href="{short}" target="_blank">{short}</a>'))
+    short = 'http://localhost/' + short_url.short
+    flash(
+        Markup(
+            f'Ваша новая ссылка готова: <br> <a href="{short}" target="_blank">{short}</a>'
+        )
+    )
     return short
 
 
