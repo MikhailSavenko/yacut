@@ -1,5 +1,5 @@
 from datetime import datetime
-
+from flask import url_for
 from yacut import db
 
 
@@ -10,8 +10,9 @@ class URLMap(db.Model):
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 
     def to_dict(self):
+        short = url_for('get_website', short=self.short, _external=True)
         return dict(
-            url=self.original, short_link='http://localhost/' + self.short
+            url=self.original, short_link=short
         )
 
     def from_dict(self, data):

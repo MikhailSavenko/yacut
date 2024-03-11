@@ -1,7 +1,7 @@
 import random
 import string
 
-from flask import Markup, abort, flash, redirect, render_template
+from flask import Markup, abort, flash, redirect, render_template, url_for
 from sqlalchemy.exc import SQLAlchemyError
 
 from . import app, db
@@ -31,7 +31,7 @@ def get_short(form, original, short):
         flash('Предложенный вариант короткой ссылки уже существует.')
         return render_template('index.html', form=form)
     short_url = create_new_object(original=original, short=short)
-    short = 'http://localhost/' + short_url.short
+    short = url_for('get_website', short=f'{short_url.short}', _external=True)
     flash(
         Markup(
             f'Ваша новая ссылка готова: <br> <a href="{short}" target="_blank">{short}</a>'
