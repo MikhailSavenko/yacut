@@ -1,1 +1,12 @@
-Single-database configuration for Flask.
+Flask-Migrate обертка для Alembic
+
+Установка:
+pip install Flask-Migrate
+
+Использование
+1. Импортировать Migrate 
+2. Создать экземпляр класса Migrate 
+3. Парамектрами передать (экземплар класса Flask, экземпляр класса БД)
+4. Создать репозитории со сценариями миграций flask bd init
+5. Создаем сценаий flask db migrate
+6. Приминяем миграции(запускаем сценарий в работу) flask db upgrade
