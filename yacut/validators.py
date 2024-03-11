@@ -1,5 +1,6 @@
-from .error_handlers import InvalidAPIUsage
 import re
+
+from .error_handlers import InvalidAPIUsage
 from .models import URLMap
 
 

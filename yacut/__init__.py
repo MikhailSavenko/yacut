@@ -9,4 +9,4 @@ db = SQLAlchemy(app)
 
 migrate = Migrate(app, db)
 
-from . import error_handlers, views, api_views
+from . import api_views, error_handlers, views

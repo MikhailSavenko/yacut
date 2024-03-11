@@ -1,10 +1,12 @@
-from .models import URLMap
-from . import app, db
-from flask import render_template, flash, Markup, redirect, abort
-from .forms import UrlForm
 import random
 import string
+
+from flask import Markup, abort, flash, redirect, render_template
 from sqlalchemy.exc import SQLAlchemyError
+
+from . import app, db
+from .forms import UrlForm
+from .models import URLMap
 
 
 def create_new_object(original, short) -> object:

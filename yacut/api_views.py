@@ -1,11 +1,11 @@
-from flask import request, jsonify
+from flask import jsonify, request
+from sqlalchemy.exc import SQLAlchemyError
 
-from .models import URLMap
 from . import app, db
 from .error_handlers import InvalidAPIUsage
+from .models import URLMap
+from .validators import duplicate_validator, validator_custom_id
 from .views import random_short_url
-from sqlalchemy.exc import SQLAlchemyError
-from .validators import validator_custom_id, duplicate_validator
 
 
 def create_new_object_api(data):
