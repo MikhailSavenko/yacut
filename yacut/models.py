@@ -1,4 +1,5 @@
 from datetime import datetime
+
 from flask import url_for
 from yacut import db
 
@@ -11,9 +12,7 @@ class URLMap(db.Model):
 
     def to_dict(self):
         short = url_for('get_website', short=self.short, _external=True)
-        return dict(
-            url=self.original, short_link=short
-        )
+        return dict(url=self.original, short_link=short)
 
     def from_dict(self, data):
         if 'url' in data:

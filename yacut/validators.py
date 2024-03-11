@@ -6,10 +6,10 @@ from .models import URLMap
 
 def validator_custom_id(custom_id):
     if not (1 <= len(custom_id) <= 16):
-        raise InvalidAPIUsage("Указано недопустимое имя для короткой ссылки")
+        raise InvalidAPIUsage('Указано недопустимое имя для короткой ссылки')
 
-    if not re.match("^[a-zA-Z0-9]+$", custom_id):
-        raise InvalidAPIUsage("Указано недопустимое имя для короткой ссылки")
+    if not re.match('^[a-zA-Z0-9]+$', custom_id):
+        raise InvalidAPIUsage('Указано недопустимое имя для короткой ссылки')
 
 
 def duplicate_validator(short):

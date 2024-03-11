@@ -1,5 +1,7 @@
+import logging
 import random
 import string
+from http import HTTPStatus
 
 from flask import Markup, abort, flash, redirect, render_template, url_for
 from sqlalchemy.exc import SQLAlchemyError
@@ -17,7 +19,7 @@ def create_new_object(original, short) -> object:
         return short_url
     except SQLAlchemyError as e:
         db.session.rollback()
-        print(f"Ошибка при создании нового объекта URLMap: {e}")
+        logging.error(f'Ошибка при создании нового объекта URLMap: {e}')
 
 
 def random_short_url(length=6) -> str:
@@ -43,16 +45,15 @@ def get_short(form, original, short):
 @app.route('/', methods=['GET', 'POST'])
 def index_view():
     form = UrlForm()
-    if form.validate_on_submit():
-        short = form.custom_id.data
-        original = form.original_link.data
-        if short:
-            get_short(form, original, short)
-            return render_template('index.html', form=form)
-        else:
-            short = random_short_url()
-            get_short(form, original, short)
-            return render_template('index.html', form=form)
+    if not form.validate_on_submit():
+        return render_template('index.html', form=form)
+    short = form.custom_id.data
+    original = form.original_link.data
+    if short:
+        get_short(form, original, short)
+        return render_template('index.html', form=form)
+    short = random_short_url()
+    get_short(form, original, short)
     return render_template('index.html', form=form)
 
 
@@ -62,4 +63,4 @@ def get_website(short):
     if url_website:
         return redirect(url_website.original)
     else:
-        abort(404)
+        abort(HTTPStatus.NOT_FOUND)

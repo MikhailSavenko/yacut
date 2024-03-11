@@ -1,3 +1,5 @@
+from http import HTTPStatus
+
 from flask import jsonify, request
 from sqlalchemy.exc import SQLAlchemyError
 
@@ -6,7 +8,6 @@ from .error_handlers import InvalidAPIUsage, NotFoundException
 from .models import URLMap
 from .validators import duplicate_validator, validator_custom_id
 from .views import random_short_url
-from http import HTTPStatus
 
 
 def create_new_object_api(data):
