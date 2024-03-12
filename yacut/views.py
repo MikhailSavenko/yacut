@@ -62,5 +62,4 @@ def get_website(short):
     url_website = URLMap.query.filter_by(short=short).first()
     if url_website:
         return redirect(url_website.original)
-    else:
-        abort(HTTPStatus.NOT_FOUND)
+    abort(HTTPStatus.NOT_FOUND)

@@ -20,7 +20,7 @@ def create_new_object_api(data):
     except SQLAlchemyError as e:
         db.session.rollback()
         raise InvalidAPIUsage(
-            f"Ошибка при создании нового объекта URLMap: {e}"
+            f'Ошибка при создании нового объекта URLMap: {e}'
         )
 
 
@@ -30,7 +30,7 @@ def create_id():
     if data is None:
         raise InvalidAPIUsage('Отсутствует тело запроса')
     if 'url' not in data:
-        raise InvalidAPIUsage('\"url\" является обязательным полем!')
+        raise InvalidAPIUsage('"url" является обязательным полем!')
     if not data.get('url'):
         raise InvalidAPIUsage('Отсутствует тело запроса')
     if data.get('custom_id'):
